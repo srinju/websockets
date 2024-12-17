@@ -19,6 +19,7 @@ const server = http.createServer(function(reqeust : any , response : any){
     response.end('hi there!!');
 });
 */
+//establishing http server using express
 const app = (0, express_1.default)();
 const httpServer = app.listen(8081);
 //creating a websocket server instance
