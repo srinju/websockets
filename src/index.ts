@@ -9,24 +9,26 @@
 import http from 'http';
 import { WebSocketServer } from 'ws';
 
+//creating a http server
 const server = http.createServer(function(reqeust : any , response : any){
     console.log((new Date()) + 'Received request for ' + reqeust.url);
     response.end('hi there!!');
 });
 
+//creating a websocket server instance
 const wss = new WebSocketServer({server});
 
-wss.on('connection' , function connection(ws) {
-    ws.on('error' , console.error);
+wss.on('connection' , function connection(socket) { //anytime there is a connection control would reach the function and get access to a socket instance
+    socket.on('error' , console.error); //after conn we in the function and get a socket instance and whenever there is any errro show the error
 
-    ws.on('message' , function message(data , isBinarty) {
+    socket.on('message' , function message(data , isBinarty) {
         wss.clients.forEach(function each(client) {
             if(client.readyState === WebSocket.OPEN) {
                 client.send(data , { binary : isBinarty })
             }
         });
     });
-    ws.send('Hello! Message from Server!!');
+    socket.send('Hello! Message from Server!!');
 });
 
 server.listen(8080 , function() {
