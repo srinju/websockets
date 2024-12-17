@@ -6,6 +6,8 @@
 //thru websockets also there is a http server that is running under the hood only .
 //when the server gets the request of http then it upgrades to a full duplex connection that is websockets
 
+//web sockets servers are scaled horizontally 
+
 import { WebSocketServer , WebSocket } from 'ws';
 import express from "express";
 
