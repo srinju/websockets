@@ -7,7 +7,7 @@
 //when the server gets the request of http then it upgrades to a full duplex connection that is websockets
 
 import http from 'http';
-import { WebSocketServer } from 'ws';
+import { WebSocketServer , WebSocket } from 'ws';
 
 //creating a http server
 const server = http.createServer(function(reqeust : any , response : any){
@@ -17,20 +17,24 @@ const server = http.createServer(function(reqeust : any , response : any){
 
 //creating a websocket server instance
 const wss = new WebSocketServer({server});
+let usercount = 0;
 
 wss.on('connection' , function connection(socket) { //anytime there is a connection control would reach the function and get access to a socket instance
     socket.on('error' , console.error); //after conn we in the function and get a socket instance and whenever there is any errro show the error
 
-    socket.on('message' , function message(data) { //and now whenver there is a message then 
+    socket.on('message' , function message(data , isBinary) { //and now whenver there is a message then 
         wss.clients.forEach(function each(client) { //for all clients connected to the websocket server 
             if(client.readyState === WebSocket.OPEN) { //a lot of times it takes the socket conn to open so  :- if the socket conn is open then
-                client.send(data) //send the data --> note the data is the send data that was send by the end user 
+                client.send(data , {binary : isBinary}) //send the data --> note the data is the send data that was send by the end user 
             }
         });
     });
+    console.log("user count is : " , ++usercount);
     socket.send('Hello! you have connected to the websocket server'); //whenever the user connects to the websocket server send them a hello message 
 });
 
 server.listen(8081 , function() {
-    console.log((new Date()) + 'Server is listening on port 8080');
+    console.log((new Date()) + 'Server is listening on port 8081');
 });
+
+//so now if we open postwoman and make two conncection on different tabs and then we send a message then we can see the message on both users . therefore a websocket conn is established 

@@ -19,17 +19,19 @@ const server = http_1.default.createServer(function (reqeust, response) {
 });
 //creating a websocket server instance
 const wss = new ws_1.WebSocketServer({ server });
+let usercount = 0;
 wss.on('connection', function connection(socket) {
     socket.on('error', console.error); //after conn we in the function and get a socket instance and whenever there is any errro show the error
-    socket.on('message', function message(data) {
+    socket.on('message', function message(data, isBinary) {
         wss.clients.forEach(function each(client) {
-            if (client.readyState === WebSocket.OPEN) { //a lot of times it takes the socket conn to open so  :- if the socket conn is open then
-                client.send(data); //send the data --> note the data is the send data that was send by the end user 
+            if (client.readyState === ws_1.WebSocket.OPEN) { //a lot of times it takes the socket conn to open so  :- if the socket conn is open then
+                client.send(data, { binary: isBinary }); //send the data --> note the data is the send data that was send by the end user 
             }
         });
     });
+    console.log("user count is : ", ++usercount);
     socket.send('Hello! you have connected to the websocket server'); //whenever the user connects to the websocket server send them a hello message 
 });
 server.listen(8081, function () {
-    console.log((new Date()) + 'Server is listening on port 8080');
+    console.log((new Date()) + 'Server is listening on port 8081');
 });
