@@ -18,6 +18,11 @@ function App() {
       console.log("received message : ", message.data);
       setlatestMessage(message.data); //set the status to whatever the latest message that came from the server 
     }
+
+    return () => { //this is for  > suppose the user goes to a non chat page then the socket conn should close 
+      socket.close();
+    }
+
   },[]);
 
   if(!socket){ //when ever there is no socket conn established it shows this message 
