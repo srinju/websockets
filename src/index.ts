@@ -21,8 +21,8 @@ const wss = new WebSocketServer({server});
 wss.on('connection' , function connection(socket) { //anytime there is a connection control would reach the function and get access to a socket instance
     socket.on('error' , console.error); //after conn we in the function and get a socket instance and whenever there is any errro show the error
 
-    socket.on('message' , function message(data , isBinarty) {
-        wss.clients.forEach(function each(client) {
+    socket.on('message' , function message(data , isBinarty) { //and now whenver there is a message then 
+        wss.clients.forEach(function each(client) { //for all clients connected to the server 
             if(client.readyState === WebSocket.OPEN) {
                 client.send(data , { binary : isBinarty })
             }
