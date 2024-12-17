@@ -6,17 +6,23 @@
 //thru websockets also there is a http server that is running under the hood only .
 //when the server gets the request of http then it upgrades to a full duplex connection that is websockets
 
-import http from 'http';
 import { WebSocketServer , WebSocket } from 'ws';
+import express from "express";
 
-//creating a http server
+/*
+//creating a http server(native approach)
 const server = http.createServer(function(reqeust : any , response : any){
     console.log((new Date()) + 'Received request for ' + reqeust.url);
     response.end('hi there!!');
 });
+*/
+
+//establishing http server using express
+const app  = express();
+const httpServer = app.listen(8081)
 
 //creating a websocket server instance
-const wss = new WebSocketServer({server});
+const wss = new WebSocketServer({server : httpServer});
 let usercount = 0;
 
 wss.on('connection' , function connection(socket) { //anytime there is a connection control would reach the function and get access to a socket instance
@@ -33,8 +39,10 @@ wss.on('connection' , function connection(socket) { //anytime there is a connect
     socket.send('Hello! you have connected to the websocket server'); //whenever the user connects to the websocket server send them a hello message 
 });
 
-server.listen(8081 , function() {
+/*
+app.listen(8081 , function() {
     console.log((new Date()) + 'Server is listening on port 8081');
 });
+*/
 
 //so now if we open postwoman and make two conncection on different tabs and then we send a message then we can see the message on both users . therefore a websocket conn is established 
