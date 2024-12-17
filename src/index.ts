@@ -21,14 +21,14 @@ const wss = new WebSocketServer({server});
 wss.on('connection' , function connection(socket) { //anytime there is a connection control would reach the function and get access to a socket instance
     socket.on('error' , console.error); //after conn we in the function and get a socket instance and whenever there is any errro show the error
 
-    socket.on('message' , function message(data , isBinarty) { //and now whenver there is a message then 
-        wss.clients.forEach(function each(client) { //for all clients connected to the server 
-            if(client.readyState === WebSocket.OPEN) {
-                client.send(data , { binary : isBinarty })
+    socket.on('message' , function message(data) { //and now whenver there is a message then 
+        wss.clients.forEach(function each(client) { //for all clients connected to the websocket server 
+            if(client.readyState === WebSocket.OPEN) { //a lot of times it takes the socket conn to open so  :- if the socket conn is open then
+                client.send(data) //send the data --> note the data is the send data that was send by the end user 
             }
         });
     });
-    socket.send('Hello! Message from Server!!');
+    socket.send('Hello! you have connected to the websocket server'); //whenever the user connects to the websocket server send them a hello message 
 });
 
 server.listen(8080 , function() {
